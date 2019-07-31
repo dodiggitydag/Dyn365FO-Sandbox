@@ -16,10 +16,10 @@ namespace BingSpellCheckAPIWrapper
     public class BingSpellCheckAPIWrapper
     {
         //private static string s_host = "https://api.cognitive.microsoft.com";
-        private static string s_host = "https://bingspellcheckapi.cognitiveservices.azure.com"; // Found specific endpoint in Azure Portal
+        private static string s_host = "https://YOUR_ENDPOINT_ADDRESS.cognitiveservices.azure.com"; // Found specific endpoint in Azure Portal
         private static string s_path = "/bing/v7.0/SpellCheck?";
         private static string s_params = "mkt=en-US&mode=spell";
-        private string m_key = "76d8f2ad3e81490ea84e3248af92601c";
+        private string m_key = "YOUR API KEY HERE"; // Found specific endpoint in Azure Portal
         private string m_response;
 
         public BingSpellCheckAPIWrapper()
