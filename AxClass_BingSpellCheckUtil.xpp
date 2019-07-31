@@ -1,0 +1,34 @@
+﻿using Newtonsoft.Json;
+using BingSpellCheckAPIWrapper;
+
+class BingSpellCheckUtil
+{
+    /// <summary>
+    /// https://usnconeboxax1aos.cloud.onebox.dynamics.com/?cmp=usmf&mi=SysClassRunner&cls=BingSpellCheckUtil
+    /// </summary>
+    /// <param name = "_args"></param>
+    static void main(Args _args)
+    {
+        try
+        {
+            BingSpellCheckAPIWrapper api = new BingSpellCheckAPIWrapper();
+
+            // On free tier you can make only one request per minute.
+            info(api.SpellCheck("Dynamiacs"));
+
+            // Use this if you want to parse the JSON
+            // JsonConvert.DeserializeObject(contentString);
+        }
+        catch (Exception::Error)
+        {
+            info("Caught 'Exception::Error'.");
+        }
+        catch (Exception::CLRError)
+        {
+            info("Caught 'Exception::CLRError'.");
+            System.Exception ex = CLRInterop::getLastException();
+            info(ex.ToString());
+        }
+    }
+
+}
