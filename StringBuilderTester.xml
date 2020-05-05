@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>StringBuilderTester</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+using System.Text;
+
+// https://usnconeboxax1aos.cloud.onebox.dynamics.com/?cmp=DAT&mi=SysClassRunner&cls=StringBuilderTester
+
+class StringBuilderTester
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>main</Name>
+				<Source><![CDATA[
+    static void main(Args _args)
+    {
+        StringBuilderTester::doTest(1028, 10);
+        StringBuilderTester::doTest(1028 * 50, 10);
+        StringBuilderTester::doTest(1028 * 100, 10);
+        StringBuilderTester::doTest(1028 * 500, 10);
+        StringBuilderTester::doTest(1028 * 1000, 10);
+        /*
+        // Test just the StringBuilder to make sure it is recording correctly because it was so much faster
+        int ticksElapsed = StringBuilderTester::test_StringBuilder(1028 * 100, 10);
+        info(strFmt("%1 concatenations of a %2-character string took %3 ticks using StringBuilder", 1028 * 500, 10, ticksElapsed));
+        */
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>doTest</Name>
+				<Source><![CDATA[
+    public static void doTest(int _iterations, int _stringLength)
+    {
+        int ticksElapsed;
+
+        ticksElapsed = StringBuilderTester::test_StringBuilder(_iterations, _stringLength);
+        info(strFmt("%1 concatenations of a %2-character string took %3 ticks using StringBuilder", _iterations, _stringLength, ticksElapsed));
+        
+        ticksElapsed = StringBuilderTester::test_Plus(_iterations, _stringLength);
+        info(strFmt("%1 concatenations of a %2-character string took %3 ticks using Plus symbol", _iterations, _stringLength, ticksElapsed));
+
+        ticksElapsed = StringBuilderTester::test_strFmt(_iterations, _stringLength);
+        info(strFmt("%1 concatenations of a %2-character string took %3 ticks using strFmt", _iterations, _stringLength, ticksElapsed));
+
+        ticksElapsed = StringBuilderTester::test_stringConcat(_iterations, _stringLength);
+        info(strFmt("%1 concatenations of a %2-character string took %3 ticks using String::Concat", _iterations, _stringLength, ticksElapsed));
+        
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>test_StringBuilder</Name>
+				<Source><![CDATA[
+    public static int test_StringBuilder(int _iterations, int _stringLength)
+    {
+        str             strToAppend = strRep("A", _stringLength);
+        int             ticksStart;
+        int             ticksEnd;
+        StringBuilder   sb = new StringBuilder();
+
+        ticksStart = WinAPIServer::getTickCount();
+
+        for (int i = 1; i < _iterations; i++)
+        {
+            sb.Append(strToAppend);
+        }
+
+        // Need to call ToString() otherwise this might be an unfair comparison
+        str s = sb.ToString();
+        if (s) // Preventing potential compiler optimization
+        {
+            s += "1"; // Preventing potential compiler optimization
+        }
+
+        ticksEnd = WinAPIServer::getTickCount();
+
+        return ticksEnd - ticksStart;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>test_Plus</Name>
+				<Source><![CDATA[
+    public static int test_Plus(int _iterations, int _stringLength)
+    {
+        str strToAppend = strRep("A", _stringLength);
+        int     ticksStart;
+        int     ticksEnd;
+        str     longString;
+
+        ticksStart  = WinAPIServer::getTickCount();
+
+        for (int i = 1; i < _iterations; i++)
+        {
+            longString += strToAppend;
+        }
+
+        ticksEnd = WinAPIServer::getTickCount();
+
+        return ticksEnd - ticksStart;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>test_strFmt</Name>
+				<Source><![CDATA[
+    public static int test_strFmt(int _iterations, int _stringLength)
+    {
+        str strToAppend = strRep("A", _stringLength);
+        int     ticksStart;
+        int     ticksEnd;
+        str     longString;
+
+        ticksStart  = WinAPIServer::getTickCount();
+
+        for (int i = 1; i < _iterations; i++)
+        {
+            longString = strFmt("%1%2", longString, strToAppend);
+        }
+
+        ticksEnd = WinAPIServer::getTickCount();
+
+        return ticksEnd - ticksStart;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>test_stringConcat</Name>
+				<Source><![CDATA[
+    public static int test_stringConcat(int _iterations, int _stringLength)
+    {
+        str strToAppend = strRep("A", _stringLength);
+        int     ticksStart;
+        int     ticksEnd;
+        str     longString;
+
+        ticksStart  = WinAPIServer::getTickCount();
+
+        for (int i = 1; i < _iterations; i++)
+        {
+            longString = System.String::Concat(longString, strToAppend);
+        }
+
+        ticksEnd = WinAPIServer::getTickCount();
+
+        return ticksEnd - ticksStart;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>
